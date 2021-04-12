@@ -20,4 +20,17 @@ export class ShoppingListService {
         this.ingredients.push(ingredient);
         this.ingredientsChanged.emit(this.ingredients.slice());
     }
+
+    // addIngredients(ingredients: Ingredient[]) {
+        // The below works fine, but causes a lot of unnecessary event emissions when there are lots of ingredients
+    //     for (let ingredient of ingredients) {
+    //         this.addIngredient(ingredient);
+    //     }
+    // }
+
+    addIngredients(ingredients: Ingredient[]) {
+        // Using the spread operator (...) lets us get each ingredient from the array rather than the whole array as a single object
+        this.ingredients.push(...ingredients);
+        this.ingredientsChanged.emit(this.ingredients.slice());
+    }
 }

@@ -16,9 +16,17 @@ export class ShoppingListService {
         
     }
 
-    addIngredient(ingredient: Ingredient) {
-        this.ingredients.push(ingredient);
-        this.ingredientsChanged.emit(this.ingredients.slice());
+    addIngredient(ingredient: Ingredient, publishChanges = true) {
+        const index = this.ingredients.findIndex(ing => ing.name === ingredient.name);
+        if (index === -1) {
+            this.ingredients.push(ingredient);
+        } else {
+            this.ingredients[index].amount += ingredient.amount;
+        }
+
+        if (publishChanges) {
+            this.ingredientsChanged.emit(this.ingredients.slice());
+        }
     }
 
     // addIngredients(ingredients: Ingredient[]) {
@@ -28,9 +36,15 @@ export class ShoppingListService {
     //     }
     // }
 
+    // addIngredients(ingredients: Ingredient[]) {
+    //     // Using the spread operator (...) lets us get each ingredient from the array rather than the whole array as a single object
+    //     this.ingredients.push(...ingredients);
+    //     this.ingredientsChanged.emit(this.ingredients.slice());
+    // }
+
     addIngredients(ingredients: Ingredient[]) {
-        // Using the spread operator (...) lets us get each ingredient from the array rather than the whole array as a single object
-        this.ingredients.push(...ingredients);
+        ingredients.forEach(ing => this.addIngredient(ing, false));
         this.ingredientsChanged.emit(this.ingredients.slice());
     }
+
 }
